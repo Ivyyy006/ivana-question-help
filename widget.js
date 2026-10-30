@@ -5,6 +5,28 @@
   const button = document.getElementById('help-button');
   const panel = document.getElementById('help-panel');
   const status = document.getElementById('help-status');
+  // First-field proof. Other instances retain their existing layout until verified.
+  const stationary = new URLSearchParams(location.search).get('qid') === '75';
+  let desiredOpenHeight = 44;
+  if (stationary) {
+    const layout = document.createElement('style');
+    layout.textContent = `
+      html, body { overflow: hidden; }
+      #help-widget { height: 44px; }
+      #help-panel {
+        position: fixed;
+        top: 48px;
+        right: 4px;
+        left: auto;
+        width: calc(100% - 8px);
+        margin: 0;
+        max-height: max(0px, calc(100vh - 52px));
+        max-height: max(0px, calc(100dvh - 52px));
+        overflow: auto;
+      }
+    `;
+    document.head.appendChild(layout);
+  }
   let connected = false;
   let lastHeight = -1;
   let frameRequest = 0;
@@ -13,16 +35,28 @@
     cancelAnimationFrame(frameRequest);
     frameRequest = requestAnimationFrame(function () {
       panel.dataset.compact = String(root.getBoundingClientRect().width <= 330);
-      const height = Math.ceil(root.getBoundingClientRect().height);
+      let height = Math.ceil(root.getBoundingClientRect().height);
+      if (stationary) {
+        if (panel.hidden) height = 44;
+        else {
+          // scrollHeight retains the full text height when the viewport clips it.
+          desiredOpenHeight = Math.ceil(panel.scrollHeight) + 52;
+          height = Math.max(53, desiredOpenHeight);
+        }
+      }
       if (connected && height !== lastHeight) {
         lastHeight = height;
         window.JFCustomWidget.requestFrameResize({ height: height });
+      }
+      if (stationary && !panel.hidden && window.innerHeight > 44) {
+        panel.style.visibility = 'visible';
       }
     });
   }
 
   function close(returnFocus) {
     panel.hidden = true;
+    panel.style.visibility = '';
     button.setAttribute('aria-expanded', 'false');
     button.removeAttribute('aria-describedby');
     if (returnFocus) button.focus({ preventScroll: true });
@@ -48,6 +82,7 @@
   button.addEventListener('click', function () {
     if (button.getAttribute('aria-expanded') === 'true') { close(false); return; }
     panel.hidden = false;
+    if (stationary) panel.style.visibility = 'hidden';
     button.setAttribute('aria-expanded', 'true');
     button.setAttribute('aria-describedby', panel.id);
     resize();
@@ -56,7 +91,7 @@
     if (event.key === 'Escape' && !panel.hidden) { event.preventDefault(); close(true); }
   });
   document.addEventListener('pointerdown', function (event) {
-    if (!root.contains(event.target)) close(false);
+    if (!button.contains(event.target) && !panel.contains(event.target)) close(false);
   });
   window.addEventListener('blur', function () { close(false); });
   window.addEventListener('beforeprint', function () { close(false); });
