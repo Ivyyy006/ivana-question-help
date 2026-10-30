@@ -1,0 +1,70 @@
+/* Measured calendar reference, October 30, 2026. */
+.ivana-tooltip-button {
+  display: flex;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.ivana-tooltip-icon {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: #244536;
+  color: #FFFFFF;
+  font-family: "Caudex", Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+@media (hover: hover) {
+  .ivana-tooltip-button:hover .ivana-tooltip-icon { background: #4D665E; }
+}
+.ivana-tooltip-button:focus-visible {
+  outline: 2px solid #C3A263;
+  outline-offset: 2px;
+}
+.ivana-tooltip-panel {
+  position: fixed;
+  z-index: 1000;
+  box-sizing: border-box;
+  width: min(354px, calc(100vw - 24px));
+  margin: 0;
+  padding: 18px 20px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  border-radius: 14px;
+  background: #4D665E;
+  box-shadow: 0 4px 14px rgba(24, 45, 60, .18);
+  color: #FFFFFF;
+  font-family: "Caudex", Georgia, serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.ivana-tooltip-panel[data-compact="true"] {
+  padding: 16px;
+  font-size: 15px;
+}
+.ivana-tooltip-panel[hidden] { display: none !important; }
+@media print {
+  .ivana-tooltip-button,
+  .ivana-tooltip-panel { display: none !important; }
+}

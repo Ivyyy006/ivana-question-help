@@ -1,0 +1,16 @@
+/* Widget-only layout. Never paste this into the parent form stylesheet. */
+html, body { margin: 0; padding: 0; background: transparent; }
+body { color: #303849; font-family: "Caudex", Georgia, serif; }
+#help-widget { box-sizing: border-box; width: 100%; padding: 4px; }
+.widget-trigger-row { display: flex; justify-content: flex-end; }
+#help-panel {
+  position: static;
+  width: min(354px, 100%);
+  max-height: none;
+  margin: 4px 0 8px auto;
+  overflow: visible;
+}
+#help-status { margin: 4px 0; font-size: 14px; line-height: 1.4; }
+#help-status[hidden] { display: none; }
+.ivana-tooltip-button:disabled { cursor: default; }
+@media print { #help-widget { display: none !important; } }

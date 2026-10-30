@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ivana Dipp | Question Help Preview</title>
+  <meta name="description" content="A standalone design preview matching the existing calendar help buttons.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tooltip.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <header class="demo-toolbar">
+    <h1>Question help preview</h1>
+    <p>Tap a question mark to open the helper text. Tap it again or tap outside to close.</p>
+    <nav class="demo-controls" aria-label="Preview layout">
+      <button type="button" data-demo-width="320" aria-pressed="false">Narrow phone</button>
+      <button type="button" data-demo-width="390" aria-pressed="false">Phone</button>
+      <button type="button" data-demo-width="752" aria-pressed="true">Desktop</button>
+    </nav>
+  </header>
+  <main class="demo-stage">
+    <div class="demo-surface">
+      <section class="demo-field">
+        <div class="demo-question">
+          <label for="zip-preview"><span class="demo-required" aria-hidden="true">*</span>What is your ZIP code?</label>
+          <button class="ivana-tooltip-button" type="button" data-ivana-help="zip" aria-label="Help for ZIP Code">
+            <span class="ivana-tooltip-icon" aria-hidden="true">?</span>
+          </button>
+        </div>
+        <input class="demo-input" id="zip-preview" type="text" inputmode="numeric" placeholder="ZIP/Postal Code" autocomplete="off">
+      </section>
+      <section class="demo-field">
+        <div class="demo-question">
+          <h2><span class="demo-required" aria-hidden="true">*</span>What is your estimated annual household income?</h2>
+          <button class="ivana-tooltip-button" type="button" data-ivana-help="income" aria-label="Help for Estimated Annual Household Income">
+            <span class="ivana-tooltip-icon" aria-hidden="true">?</span>
+          </button>
+        </div>
+        <div class="demo-answers" role="group" aria-label="Estimated annual household income example">
+          <label><input type="radio" name="income-preview" value="under25">Under $25,000</label>
+          <label><input type="radio" name="income-preview" value="25to50">$25,000 - $49,999</label>
+          <label><input type="radio" name="income-preview" value="50to75">$50,000 - $74,999</label>
+        </div>
+      </section>
+      <section class="demo-field">
+        <div class="demo-question">
+          <h2><span class="demo-required" aria-hidden="true">*</span>Which BEST describes your situation?</h2>
+          <button class="ivana-tooltip-button" type="button" data-ivana-help="qle" aria-label="Help for Life-Changing Events">
+            <span class="ivana-tooltip-icon" aria-hidden="true">?</span>
+          </button>
+        </div>
+        <div class="demo-answers" role="group" aria-label="Current situation example">
+          <label><input type="radio" name="situation-preview" value="event">I've recently experienced a life-changing event</label>
+          <label><input type="radio" name="situation-preview" value="never">I've never had health insurance</label>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script id="ivana-help-content" type="application/json">
+    {
+      "zip": "Your ZIP code helps us identify health insurance options available in your area.",
+      "income": "Please estimate your household’s total income for the year you’re seeking coverage. This helps us explore whether you may qualify for savings or financial assistance.",
+      "qle": "Life-Changing Events / QLEs\n\nLosing health coverage due to:\n* Job-based coverage ending\n* Aging out of a parent’s plan at 26\n* Medicaid or CHIP eligibility ending\n* Divorce\n* A family member’s death\n\nOther qualifying life changes:\n* Getting married\n* Having or adopting a child\n* Moving to a new coverage area"
+    }
+  </script>
+  <script src="tooltip.js"></script>
+  <script>
+    document.querySelectorAll('[data-demo-width]').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-demo-width]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+        document.querySelector('.demo-surface').style.setProperty('--demo-width', button.dataset.demoWidth + 'px');
+        window.dispatchEvent(new Event('resize'));
+      });
+    });
+  </script>
+</body>
+</html>
