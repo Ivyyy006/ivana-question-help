@@ -5,10 +5,16 @@
   const button = document.getElementById('help-button');
   const panel = document.getElementById('help-panel');
   const status = document.getElementById('help-status');
-  // First-field proof. Other instances retain their existing layout until verified.
-  const stationary = new URLSearchParams(location.search).get('qid') === '75';
+  // Preserve the existing first-field proof; roll out other helpers only in
+  // the authorized clone, identified by Jotform's documented ready event.
+  let stationary = new URLSearchParams(location.search).get('qid') === '75';
+  let stationaryLayoutApplied = false;
   let desiredOpenHeight = 44;
-  if (stationary) {
+  function enableStationaryLayout() {
+    stationary = true;
+    if (stationaryLayoutApplied) return;
+    stationaryLayoutApplied = true;
+    root.dataset.stationaryLayout = 'true';
     const layout = document.createElement('style');
     layout.textContent = `
       html, body { overflow: hidden; }
@@ -27,6 +33,7 @@
     `;
     document.head.appendChild(layout);
   }
+  if (stationary) enableStationaryLayout();
   let connected = false;
   let lastHeight = -1;
   let frameRequest = 0;
@@ -103,7 +110,10 @@
   if (window.self === window.top && new URLSearchParams(location.search).get('preview') === '1') {
     configure('Your ZIP code helps us identify health insurance options available in your area.', 'Help for ZIP Code');
   } else if (window.JFCustomWidget && typeof window.JFCustomWidget.subscribe === 'function') {
-    window.JFCustomWidget.subscribe('ready', function () {
+    window.JFCustomWidget.subscribe('ready', function (formId) {
+      const readyFormId = formId && typeof formId === 'object'
+        ? (formId.formId || formId.formID) : formId;
+      if (String(readyFormId) === '263031945610148') enableStationaryLayout();
       connected = true;
       configure(window.JFCustomWidget.getWidgetSetting('HelpText'), window.JFCustomWidget.getWidgetSetting('HelpLabel'));
     });
