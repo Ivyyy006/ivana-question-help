@@ -5,7 +5,7 @@ body { color: #303849; font-family: "Caudex", Georgia, serif; }
 .widget-trigger-row { display: flex; justify-content: flex-end; }
 #help-panel {
   position: static;
-  width: min(354px, 100%);
+  width: min(312px, 100%);
   max-height: none;
   margin: 4px 0 8px auto;
   overflow: visible;
