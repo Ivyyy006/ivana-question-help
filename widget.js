@@ -26,6 +26,7 @@
         left: auto;
         width: min(312px, calc(100% - 8px));
         margin: 0;
+        transition: opacity 140ms ease-out;
         max-height: max(0px, calc(100vh - 52px));
         max-height: max(0px, calc(100dvh - 52px));
         overflow: auto;
@@ -37,6 +38,7 @@
   let connected = false;
   let lastHeight = -1;
   let frameRequest = 0;
+  let revealTimer = 0;
 
   function resize() {
     cancelAnimationFrame(frameRequest);
@@ -55,15 +57,24 @@
         lastHeight = height;
         window.JFCustomWidget.requestFrameResize({ width: 320, height: height });
       }
-      if (stationary && !panel.hidden && window.innerHeight > 44) {
-        panel.style.visibility = 'visible';
+      if (stationary && !panel.hidden && window.innerHeight >= desiredOpenHeight - 2) {
+        revealPanel();
       }
     });
   }
 
+  function revealPanel() {
+    if (panel.hidden) return;
+    clearTimeout(revealTimer);
+    panel.style.visibility = 'visible';
+    panel.style.opacity = '1';
+  }
+
   function close(returnFocus) {
     panel.hidden = true;
+    clearTimeout(revealTimer);
     panel.style.visibility = '';
+    panel.style.opacity = '';
     button.setAttribute('aria-expanded', 'false');
     button.removeAttribute('aria-describedby');
     if (returnFocus) button.focus({ preventScroll: true });
@@ -89,7 +100,12 @@
   button.addEventListener('click', function () {
     if (button.getAttribute('aria-expanded') === 'true') { close(false); return; }
     panel.hidden = false;
-    if (stationary) panel.style.visibility = 'hidden';
+    if (stationary) {
+      panel.style.visibility = 'hidden';
+      panel.style.opacity = '0';
+      clearTimeout(revealTimer);
+      revealTimer = setTimeout(revealPanel, 700);
+    }
     button.setAttribute('aria-expanded', 'true');
     button.setAttribute('aria-describedby', panel.id);
     resize();
