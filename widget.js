@@ -24,7 +24,7 @@
         top: 48px;
         right: 4px;
         left: auto;
-        width: calc(100% - 8px);
+        width: min(312px, calc(100% - 8px));
         margin: 0;
         max-height: max(0px, calc(100vh - 52px));
         max-height: max(0px, calc(100dvh - 52px));
@@ -53,7 +53,7 @@
       }
       if (connected && height !== lastHeight) {
         lastHeight = height;
-        window.JFCustomWidget.requestFrameResize({ height: height });
+        window.JFCustomWidget.requestFrameResize({ width: 320, height: height });
       }
       if (stationary && !panel.hidden && window.innerHeight > 44) {
         panel.style.visibility = 'visible';
