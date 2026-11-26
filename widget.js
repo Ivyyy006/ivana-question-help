@@ -129,7 +129,9 @@
     window.JFCustomWidget.subscribe('ready', function (formId) {
       const readyFormId = formId && typeof formId === 'object'
         ? (formId.formId || formId.formID) : formId;
-      if (String(readyFormId) === '263031945610148') enableStationaryLayout();
+      if (['263031945610148', '263107844356157'].includes(String(readyFormId))) {
+        enableStationaryLayout();
+      }
       connected = true;
       configure(window.JFCustomWidget.getWidgetSetting('HelpText'), window.JFCustomWidget.getWidgetSetting('HelpLabel'));
     });
