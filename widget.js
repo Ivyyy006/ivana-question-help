@@ -5,9 +5,10 @@
   const button = document.getElementById('help-button');
   const panel = document.getElementById('help-panel');
   const status = document.getElementById('help-status');
-  // Preserve the existing first-field proof; roll out other helpers only in
-  // the authorized clone, identified by Jotform's documented ready event.
-  let stationary = new URLSearchParams(location.search).get('qid') === '75';
+  // These ABG help fields need a fixed trigger even when Jotform's ready
+  // callback does not include the form ID.
+  const questionId = new URLSearchParams(location.search).get('qid');
+  let stationary = ['75', '76', '77', '78', '79', '80', '81', '86'].includes(questionId);
   let stationaryLayoutApplied = false;
   let desiredOpenHeight = 44;
   function enableStationaryLayout() {
